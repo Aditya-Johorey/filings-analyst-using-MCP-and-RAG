@@ -1,0 +1,17 @@
+langchain
+langchain-core
+langchain-community
+langchain-groq
+langchain-qdrant
+langchain-text-splitters
+langgraph
+qdrant-client
+fastembed
+fastapi
+uvicorn
+mcp[cli]
+langsmith
+sec-edgar-downloader
+beautifulsoup4
+lxml
+python-dotenv

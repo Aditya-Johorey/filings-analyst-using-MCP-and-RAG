@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+
+# SEC downloader & data directories
+data/
+imp_files/
+sec-edgar-data/
+
+# Local databases & vector store storage
+*.sqlite3
+*.db
+qdrant_storage/
+
+# IDEs & OS system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs & temporary files
+*.log
+.pytest_cache/
