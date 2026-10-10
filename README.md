@@ -32,7 +32,7 @@ The response includes a `grounded` flag. It is `False` when retries ran out and 
 | Layer | Technology |
 |---|---|
 | Orchestration | LangChain, LangGraph |
-| LLM | Groq free tier (`llama-3.1-8b-instant`), Ollama optional for local use |
+| LLM | Groq free tier (`openai/gpt-oss-20b`, set via `GROQ_MODEL`), Ollama optional for local use |
 | Embeddings | FastEmbed (`BAAI/bge-small-en-v1.5`, runs on CPU) |
 | Vector DB | Qdrant Cloud (free tier) |
 | Backend | FastAPI |
@@ -89,6 +89,7 @@ pip install -r requirements.txt
 QDRANT_URL=https://xxxx.cloud.qdrant.io:6333
 QDRANT_API_KEY=your_qdrant_key
 GROQ_API_KEY=your_groq_key
+GROQ_MODEL=openai/gpt-oss-20b
 LLM_PROVIDER=groq
 
 LANGSMITH_TRACING=true
@@ -172,8 +173,9 @@ Documented here once those parts are built.
 | `404 Collection filings doesn't exist` | Run `python -m app.ingest` and confirm it prints a chunk count |
 | Download returns nothing or 403 | Check `SEC_NAME` and `SEC_EMAIL` in `.env` |
 | Groq `429` errors | Wait a minute and retry, since you hit the free-tier limit |
+| Groq `model_not_found` | The model was retired. Check [console.groq.com/docs/deprecations](https://console.groq.com/docs/deprecations) and update `GROQ_MODEL` in `.env` |
 | Empty search results | Confirm ingest finished and the collection has points |
 
 ## License
 
-MIT, or your choice. Filing data comes from SEC EDGAR and is public.
+MIT

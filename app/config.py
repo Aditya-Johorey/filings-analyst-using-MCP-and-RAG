@@ -15,9 +15,10 @@ def get_embeddings():
 def get_llm():
     if os.getenv("LLM_PROVIDER", "groq") == "groq":
         from langchain_groq import ChatGroq
-        return ChatGroq(model="llama-3.1-8b-instant", temperature=0)
-    from langchain_ollama import ChatOllama
-    return ChatOllama(model = "llama3.1:8b", temperature=0)
+        return ChatGroq(model=os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
+                        temperature=0)
+    from langchain_ollama import ChatOllama   # optional local-only mode
+    return ChatOllama(model="llama3.2:3b", temperature=0)
 
 def get_client():
     return QdrantClient(url = os.environ["QDRANT_URL"],
