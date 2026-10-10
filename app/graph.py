@@ -1,4 +1,5 @@
 # app/graph.py
+import re
 from typing import TypedDict, List, Optional
 from pydantic import BaseModel, Field
 from langchain_core.documents import Document
@@ -52,6 +53,7 @@ def grade(s: State):
 def reformulate(s: State):
     q = llm.invoke(
         "Rewrite this search query to retrieve better passages from a 10-K filing. "
+        "Never add company names, tickers or years that are not in the original question.\n"
         "Use terminology filings actually use (e.g. 'net sales', 'total revenues', "
         "'risk factors', 'operating income').\n"
         f"Question: {s['question']}\nFailed query: {s['query']}\n"
@@ -67,12 +69,14 @@ def generate(s: State):
               "Rules:\n"
               "1. Answer ONLY from the numbered context below.\n"
               "2. Copy figures exactly as written, with their unit (millions, billions) and period.\n"
-              "3. Cite every claim with its source number, like [1] or [2].\n"
-              "4. If the context does not contain the answer, say so. Never guess.\n\n"
+              "3. Cite every claim with plain square brackets like [1] or [2]. Never use any other bracket style.\n"
+              "4. If the context does not contain the answer, say so. Never guess.\n"
+              "5. If the question is ambiguous (no company or period named), say what is unclear instead of choosing for the user.\n\n"
               f"Context:\n{ctx}\n\nQuestion: {s['question']}")
     ans = llm.invoke(prompt).content.strip()
     if not ans:
         ans = llm.invoke(prompt).content.strip()
+    ans = re.sub(r"[【\[]\s*(\d+)\s*[】\]]", r"[\1]", ans)   # normalize 【3】 -> [3]
     return {"answer": ans or "The model returned an empty response. Please retry."}
 
 def route(s: State):
